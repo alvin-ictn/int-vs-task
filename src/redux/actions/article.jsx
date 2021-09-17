@@ -1,7 +1,8 @@
 import * as type from '../types';
 
-export const getArticle = () => {
+export const getArticle = ({start,end}) => {
   return {
+    start,end,
     type: type.GET_ARTICLE_REQUESTED,
   }
 }

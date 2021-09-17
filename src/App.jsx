@@ -1,32 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react';
 import { getArticle } from './redux/actions/article'
 
 function App() {
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
-    dispatch(getArticle());
+    dispatch(getArticle({start: 1, end: 100}));
   },[dispatch])
 
+console.log(useSelector(state => state.data.article))
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {JSON.stringify(useSelector(state => state.data.article))}
     </div>
   );
 }
