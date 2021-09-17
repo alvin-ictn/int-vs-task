@@ -13,3 +13,6 @@ export const PATCH_ARTICLE_FAILED = 'article/patch/rejected';
 export const DELETE_ARTICLE_REQUESTED = 'article/delete/pending';
 export const DELETE_ARTICLE_SUCCESS = 'article/delete/fulfilled';
 export const DELETE_ARTICLE_FAILED = 'article/delete/rejected';
+
+export const OPEN_DIAGLOG = 'dialog/open';
+export const CLOSE_DIALOG = 'dialog/close'

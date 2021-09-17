@@ -11,7 +11,7 @@ const articleReducer = (state = initialState, action) => {
     case type.GET_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.GET_ARTICLE_SUCCESS:
-      return { ...state, loading: false, article: [...state.article, action.article] }
+      return { ...state, loading: false, article: [...state.article, ...action.article] }
     case type.GET_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
@@ -39,6 +39,17 @@ const articleReducer = (state = initialState, action) => {
     default:
       return state
   }
+}
+
+export function dialogReducer(state = false, action) {
+  switch (action.type) {
+     case type.OPEN_DIAGLOG:
+        return true;
+     case type.CLOSE_DIALOG:
+        return false;
+     default:
+        return state;
+   }
 }
 
 export default articleReducer

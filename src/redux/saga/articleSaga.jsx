@@ -1,6 +1,7 @@
 import { call, put, takeEvery,all } from 'redux-saga/effects'
 import * as type from '../types' 
 import { API } from '../../global/api_endpoint'
+
 export const fetchGetArticle = async (id) => {
    try {
      const response = await fetch(API.GET_BY_ID(id), { method: "GET"})
@@ -16,10 +17,11 @@ export const fetchGetArticle = async (id) => {
 const generate = (start, end) => {
    return Array(end - start + 1).fill().map((_, idx) => start + idx)
 }
+
 function* handleGetArticle({start, end}) {
    try {
       const article = yield all([...generate(start,end).map(num =>  call(fetchGetArticle, num))]);
-      yield put({type: type.GET_ARTICLE_SUCCESS, article: article});
+      yield put({type: type.GET_ARTICLE_SUCCESS, article});
    } catch (e) {
       yield put({type: type.GET_ARTICLE_FAILED, message: e.message});
    }

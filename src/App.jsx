@@ -3,6 +3,8 @@ import './App.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react';
 import { getArticle } from './redux/actions/article'
+import Card from './components/Card'
+import { Grid } from '@mui/material';
 
 function App() {
   const dispatch = useDispatch();
@@ -11,11 +13,10 @@ function App() {
     dispatch(getArticle({start: 1, end: 100}));
   },[dispatch])
 
-console.log(useSelector(state => state.data.article))
   return (
-    <div className="App">
-      {JSON.stringify(useSelector(state => state.data.article))}
-    </div>
+    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+      {useSelector(state => state.data.article).map((data, idx) => <Grid item xs={2} sm={4} md={4} key={idx}><Card data={data}/></Grid>)}
+    </Grid>
   );
 }
 
