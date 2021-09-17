@@ -13,8 +13,9 @@ export const postArticle = () => {
   }
 }
 
-export const patchArticle = () => {
+export const patchArticle = (data) => {
   return {
+    data,
     type: type.PATCH_ARTICLE_REQUESTED,
   }
 }
