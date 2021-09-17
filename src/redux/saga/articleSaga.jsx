@@ -1,5 +1,5 @@
-import { call, put, takeEvery,all } from 'redux-saga/effects'
-import * as type from '../types' 
+import { call, put, takeEvery, all } from 'redux-saga/effects'
+import * as type from '../types'
 import { API } from '../../global/api_endpoint'
 
 const generate = (start, end) => {
@@ -8,47 +8,57 @@ const generate = (start, end) => {
 
 export const fetchGetArticle = async (id) => {
    try {
-     const response = await fetch(API.GET_BY_ID(id), { method: "GET"})
-     const data = await response.json() 
-     if(response.status === 200) return data
-     return false
+      const response = await fetch(API.GET_BY_ID(id), { method: "GET" })
+      const data = await response.json()
+      if (response.status === 200) return data
+      return false
    }
-  catch(e) {
-     console.log('Error', e.response.data)
-  }
+   catch (e) {
+      console.log('Error', e.response.data)
+   }
 }
 
-function* handleGetArticle({start, end}) {
+function* handleGetArticle({ start, end }) {
    try {
-      const article = yield all([...generate(start,end).map(num =>  call(fetchGetArticle, num))]);
-      yield put({type: type.GET_ARTICLE_SUCCESS, article});
+      const article = yield all([...generate(start, end).map(num => call(fetchGetArticle, num))]);
+      yield put({ type: type.GET_ARTICLE_SUCCESS, article });
    } catch (e) {
-      yield put({type: type.GET_ARTICLE_FAILED, message: e.message});
+      yield put({ type: type.GET_ARTICLE_FAILED, message: e.message });
    }
 }
 
-export const fetchPatchArticle = async ({id, patchData}) => {
+export const fetchPatchArticle = async ({ data }) => {
+   const { id, title, body } = data;
+   
    try {
-     const response = await fetch(API.EDIT(id), patchData, { method: "PATCH"});
-     const data = await response.json();
+      const response = await fetch(API.EDIT(id), {
+         method: "PATCH",
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+         }, body: JSON.stringify({title, body})
+      });
+      const jsonData = await response.json();
 
-     console.log(response, data);
+      console.log("PATCH", response, jsonData);
 
-     if(response.status === 200) return data
-     return false
+      if (response.status === 200) return jsonData
+      return false
    }
-  catch(e) {
-     console.log('Error', e.response.data)
-  }
+   catch (e) {
+      console.log('Error', e.response.data)
+   }
 }
 
 function* handlePatchArticle(data) {
-   console.log(data)
+   console.log("HANDLE", data)
    try {
-      const article = yield call(fetchPatchArticle, )
-      yield put({type: type.PATCH_ARTICLE_SUCCESS, article});
+      console.log("test")
+      const article = yield call(fetchPatchArticle, data)
+      yield put({ type: type.PATCH_ARTICLE_SUCCESS, article });
    } catch (e) {
-      yield put({type: type.PATCH_ARTICLE_FAILED, message: e.message});
+      console.log("HERE");
+      yield put({ type: type.PATCH_ARTICLE_FAILED, message: e.message });
    }
 }
 
