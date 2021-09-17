@@ -3,12 +3,11 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@mui/material';
 import { closeDialog } from '../redux/actions/dialog'
-import { patchArticle } from '../redux/actions/article'
+import { patchArticle, postArticle } from '../redux/actions/article'
 
 export default function DialogComponent() {
     const dispatch = useDispatch();
@@ -16,7 +15,7 @@ export default function DialogComponent() {
     const [oldData, setPatchData] = useState({}); 
 
     useEffect(() => {
-        setPatchData(dialogData.oldData)
+        dialogData.mode === "edit" && setPatchData(() => dialogData.oldData)
     },[dialogData, dispatch]);
 
     const handleClose = () => {
@@ -24,25 +23,45 @@ export default function DialogComponent() {
         dispatch(closeDialog());
     }
 
-    const handleSubmit = async () => {
-        await dispatch(closeDialog());
+    const handleEdit = async () => {
         await dispatch(patchArticle(oldData));
+        await dispatch(closeDialog());
+        await setPatchData({});
+    }
+
+    const handleSubmit = async () => {
+        await dispatch(postArticle(oldData));
+        await dispatch(closeDialog());
         await setPatchData({});
     }
 
     return (
         <Dialog open={dialogData.dialog} onClose={handleClose}>
-            <DialogTitle>Change Content #{dialogData.oldData.id}</DialogTitle>
+            <DialogTitle>{dialogData.mode === "add" ? "Add New Article" : `Change Content #${dialogData.oldData.id}`}</DialogTitle>
             <DialogContent>
+            {dialogData.mode === "add" 
+            && <TextField
+                    autoFocus
+                    margin="dense"
+                    id="userId"
+                    label="userId"
+                    type="number"
+                    fullWidth
+                    variant="standard"
+                    onChange={(event) => {
+                        console.log(oldData)
+                        setPatchData({...oldData, userId: parseInt(event.target.value)})
+                    }}
+                />}
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="name"
+                    id="title"
                     label="Title"
                     type="text"
                     fullWidth
                     variant="standard"
-                    value={oldData.title}
+                    value={oldData.title || ""}
                     onChange={(event) => {
                         setPatchData({...oldData, title: event.target.value})
                     }}
@@ -51,19 +70,19 @@ export default function DialogComponent() {
                     rows={4}
                     autoFocus
                     margin="dense"
-                    id="name"
+                    id="body"
                     label="Body"
                     type="text"
                     fullWidth
                     variant="standard"
-                    value={oldData.body}
+                    value={oldData.body || ""}
                     onChange={(event) => {
                         setPatchData({...oldData, body: event.target.value})
                     }}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleSubmit}>Submit</Button>
+                <Button onClick={dialogData.mode === "edit" ? handleEdit : handleSubmit}>Submit</Button>
             </DialogActions>
         </Dialog>
     )

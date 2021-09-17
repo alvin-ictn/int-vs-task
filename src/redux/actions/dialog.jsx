@@ -1,8 +1,8 @@
 import * as type from '../types';
 
-export const openDialog = ({data}) => {
+export const openDialog = ({data, mode}) => {
     return {
-        data,
+        data, mode,
         type: type.OPEN_DIAGLOG
     }
 }

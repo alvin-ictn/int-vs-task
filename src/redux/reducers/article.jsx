@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   error: null,
   dialog: false,
+  mode: '',
   oldData: {},
   patchData: {}
 }
@@ -21,6 +22,7 @@ const articleReducer = (state = initialState, action) => {
     case type.POST_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.POST_ARTICLE_SUCCESS:
+      console.log(action)
       return { ...state, loading: false, article: action.body }
     case type.POST_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
@@ -28,7 +30,11 @@ const articleReducer = (state = initialState, action) => {
     case type.PATCH_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.PATCH_ARTICLE_SUCCESS:
-      return { ...state, loading: false, article: action.body }
+      const index = state.article.findIndex(obj => obj.id == action.article.id);
+      let article = state.article;
+      article[index].title = action?.article?.title;
+      article[index].body = action?.article?.body;
+      return { ...state, loading: false, article: article }
     case type.PATCH_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
@@ -40,7 +46,7 @@ const articleReducer = (state = initialState, action) => {
       return { ...state, loading: false, error: action.message }
 
     case type.OPEN_DIAGLOG:
-      return { ...state, dialog: true, oldData: action.data};
+      return { ...state, dialog: true, oldData: action.data, mode: action.mode};
     case type.CLOSE_DIALOG:
       return { ...state, dialog: false, oldData: {}};
     default:

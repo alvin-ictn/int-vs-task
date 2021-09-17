@@ -29,7 +29,7 @@ function* handleGetArticle({ start, end }) {
 
 export const fetchPatchArticle = async ({ data }) => {
    const { id, title, body } = data;
-   
+
    try {
       const response = await fetch(API.EDIT(id), {
          method: "PATCH",
@@ -39,9 +39,6 @@ export const fetchPatchArticle = async ({ data }) => {
          }, body: JSON.stringify({title, body})
       });
       const jsonData = await response.json();
-
-      console.log("PATCH", response, jsonData);
-
       if (response.status === 200) return jsonData
       return false
    }
@@ -51,20 +48,77 @@ export const fetchPatchArticle = async ({ data }) => {
 }
 
 function* handlePatchArticle(data) {
-   console.log("HANDLE", data)
    try {
-      console.log("test")
-      const article = yield call(fetchPatchArticle, data)
+      const article = yield call(fetchPatchArticle, data);
       yield put({ type: type.PATCH_ARTICLE_SUCCESS, article });
    } catch (e) {
-      console.log("HERE");
       yield put({ type: type.PATCH_ARTICLE_FAILED, message: e.message });
+   }
+}
+
+export const fetchPostArticle = async ({ data }) => {
+   const { id, title, body } = data;
+
+   try {
+      const response = await fetch(API.EDIT(id), {
+         method: "POST",
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+         }, body: JSON.stringify({title, body})
+      });
+      const jsonData = await response.json();
+      if (response.status === 200) return jsonData
+      return false
+   }
+   catch (e) {
+      console.log('Error', e.response.data)
+   }
+}
+
+function* handlePostArticle(data) {
+   try {
+      const article = yield call(fetchPostArticle, data);
+      yield put({ type: type.POST_ARTICLE_SUCCESS, article });
+   } catch (e) {
+      yield put({ type: type.POST_ARTICLE_FAILED, message: e.message });
+   }
+}
+
+export const fetchDeleteArticle = async ({ data }) => {
+   const { id, title, body } = data;
+
+   try {
+      const response = await fetch(API.EDIT(id), {
+         method: "DELETE",
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+         }, body: JSON.stringify({title, body})
+      });
+      const jsonData = await response.json();
+      if (response.status === 200) return jsonData
+      return false
+   }
+   catch (e) {
+      console.log('Error', e.response.data)
+   }
+}
+
+function* handleDeleteArticle(data) {
+   try {
+      const article = yield call(fetchDeleteArticle, data);
+      yield put({ type: type.DELETE_ARTICLE_SUCCESS, article });
+   } catch (e) {
+      yield put({ type: type.DELETE_ARTICLE_FAILED, message: e.message });
    }
 }
 
 function* watcherArticleSaga() {
    yield takeEvery(type.GET_ARTICLE_REQUESTED, handleGetArticle);
-   yield takeEvery(type.PATCH_ARTICLE_REQUESTED, handlePatchArticle)
+   yield takeEvery(type.PATCH_ARTICLE_REQUESTED, handlePatchArticle);
+   yield takeEvery(type.POST_ARTICLE_REQUESTED, handlePostArticle);
+   yield takeEvery(type.DELETE_ARTICLE_REQUESTED, handleDeleteArticle);
 }
 
 

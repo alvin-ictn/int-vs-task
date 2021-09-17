@@ -1,3 +1,9 @@
 .icon {
   cursor: pointer;
 }
+
+.floating {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+}

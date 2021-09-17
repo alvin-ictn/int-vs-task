@@ -13,9 +13,6 @@ import { openDialog } from '../redux/actions/dialog'
 export default function CardComponent({ data }) {
   const dispatch = useDispatch();
 
-  const handleEdit = () => {
-    console.log(this)
-  };
   return (
     <>
       <Card>
@@ -27,7 +24,7 @@ export default function CardComponent({ data }) {
               </Typography>
             </Grid>
             <Grid>
-              <EditIcon className="icon" onClick={() => dispatch(openDialog({data}))} /> <DeleteIcon className="icon" />
+              <EditIcon className="icon" onClick={() => dispatch(openDialog({data, mode: 'edit'}))} /> <DeleteIcon className="icon" />
             </Grid>
           </Grid>
           <Typography variant="h5" component="div">
