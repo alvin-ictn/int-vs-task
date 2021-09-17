@@ -7,10 +7,15 @@ import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Grid } from '@mui/material/'
+import { useDispatch } from 'react-redux'
+import { openDialog } from '../redux/actions/dialog'
 
 export default function CardComponent({ data }) {
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
+  const handleEdit = () => {
+    console.log(this)
+  };
   return (
     <>
       <Card>
@@ -22,7 +27,7 @@ export default function CardComponent({ data }) {
               </Typography>
             </Grid>
             <Grid>
-              <EditIcon className="icon" onClick={handleEdit} /> <DeleteIcon className="icon" />
+              <EditIcon className="icon" onClick={() => dispatch(openDialog({data}))} /> <DeleteIcon className="icon" />
             </Grid>
           </Grid>
           <Typography variant="h5" component="div">
@@ -36,7 +41,7 @@ export default function CardComponent({ data }) {
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
-      
+
     </>
   );
 }

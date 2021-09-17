@@ -4,6 +4,9 @@ const initialState = {
   article: [],
   loading: false,
   error: null,
+  dialog: false,
+  oldData: {},
+  patchData: {}
 }
 
 const articleReducer = (state = initialState, action) => {
@@ -36,20 +39,13 @@ const articleReducer = (state = initialState, action) => {
     case type.DELETE_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
+    case type.OPEN_DIAGLOG:
+      return { ...state, dialog: true, oldData: action.data};
+    case type.CLOSE_DIALOG:
+      return { ...state, dialog: false, oldData: {}};
     default:
-      return state
+      return state;
   }
-}
-
-export function dialogReducer(state = false, action) {
-  switch (action.type) {
-     case type.OPEN_DIAGLOG:
-        return true;
-     case type.CLOSE_DIALOG:
-        return false;
-     default:
-        return state;
-   }
 }
 
 export default articleReducer

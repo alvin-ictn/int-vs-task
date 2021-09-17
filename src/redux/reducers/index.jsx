@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux';
-import article, { dialogReducer } from './article';
+import article from './article';
 
 const rootReducer = combineReducers({
   data: article,
-  dialog: dialogReducer
 });
 
 export default rootReducer;

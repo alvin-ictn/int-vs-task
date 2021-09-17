@@ -25,14 +25,3 @@ export const deleteArticle = () => {
   }
 }
 
-export const openDialog = () => {
-  return {
-    type: type.OPEN_DIAGLOG
-  }
-}
-
-export const closeDialog = () => {
-  return {
-    type: type.CLOSE_DIALOG
-  }
-}
