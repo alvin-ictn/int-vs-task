@@ -22,37 +22,38 @@ const articleReducer = (state = initialState, action) => {
     case type.POST_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.POST_ARTICLE_SUCCESS:
-      state.article.unshift(action.article);
-
-      return { ...state, loading: false}
+      let newPostData = JSON.parse(JSON.stringify(state.article));
+      newPostData.unshift(action.article)
+      return { ...state, loading: false, article: newPostData }
     case type.POST_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
     case type.PATCH_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.PATCH_ARTICLE_SUCCESS:
-      const index = state.article.findIndex(obj => obj.id == action.article.id);
-      let article = state.article;
-      article[index].title = action?.article?.title;
-      article[index].body = action?.article?.body;
-      return { ...state, loading: false, article: article }
+      const index = state.article.findIndex((obj => obj.id == action.article.id));
+      let newPatchData = JSON.parse(JSON.stringify(state.article));
+      newPatchData[index].title = action?.article?.title;
+      newPatchData[index].body = action?.article?.body;
+
+      return { ...state, loading: false, article: newPatchData }
     case type.PATCH_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
     case type.DELETE_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.DELETE_ARTICLE_SUCCESS:
-      const newArray = state.article.filter((obj => obj.id !== action.article.id.id));
+      const newArray = state.article.filter((obj => obj.id !== action.article.id.payload));
       return { ...state, loading: false, article: newArray }
     case type.DELETE_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
     case type.OPEN_DIAGLOG:
-      return { ...state, dialog: true, oldData: action.data, mode: action.mode};
+      const { data, mode } = action.payload
+      return { ...state, dialog: true, oldData: data, mode: mode };
     case type.CLOSE_DIALOG:
-      return { ...state, dialog: false};
+      return { ...state, dialog: false };
 
-    case type.CLEAR_OLD:
     default:
       return state;
   }

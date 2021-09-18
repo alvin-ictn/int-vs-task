@@ -12,11 +12,11 @@ import { patchArticle, postArticle, deleteArticle } from '../redux/actions/artic
 export default function DialogComponent() {
     const dispatch = useDispatch();
     const dialogData = useSelector(state => state.data);
-    const [oldData, setPatchData] = useState({}); 
+    const [oldData, setPatchData] = useState({});
 
     useEffect(() => {
         (dialogData.mode === "edit" || dialogData.mode === "delete") && setPatchData(() => dialogData.oldData)
-    },[dialogData, dispatch]);
+    }, [dialogData, dispatch]);
 
     const handleClose = async () => {
         await dispatch(closeDialog());
@@ -24,7 +24,14 @@ export default function DialogComponent() {
     }
 
     const handleEdit = async () => {
-        await dispatch(patchArticle(oldData));
+        let patchData = { id: oldData.id };
+
+        for (let key in oldData) {
+            if (oldData[key] !== dialogData.article.filter((item => item.id === oldData.id))[0][key]) {
+                patchData[key] = oldData[key]
+            }
+        }
+        await dispatch(patchArticle(patchData));
         await dispatch(closeDialog());
         await setPatchData({});
     }
@@ -46,7 +53,7 @@ export default function DialogComponent() {
         <Dialog open={dialogData.dialog} onClose={handleClose}>
             <DialogTitle>{dialogData.mode === "add" ? "Add New Article" : `${dialogData.mode === "edit" ? "Change" : "Delete"} Content #${dialogData?.oldData?.id}`}</DialogTitle>
             {(dialogData.mode === "add" || dialogData.mode === "edit") && <DialogContent>
-            {dialogData.mode === "add" && <TextField
+                {dialogData.mode === "add" && <TextField
                     autoFocus
                     margin="dense"
                     id="userId"
@@ -56,7 +63,7 @@ export default function DialogComponent() {
                     variant="standard"
                     onChange={(event) => {
                         console.log(oldData)
-                        setPatchData({...oldData, userId: parseInt(event.target.value)})
+                        setPatchData({ ...oldData, userId: parseInt(event.target.value) })
                     }}
                 />}
                 <TextField
@@ -69,7 +76,7 @@ export default function DialogComponent() {
                     variant="standard"
                     value={oldData.title || ""}
                     onChange={(event) => {
-                        setPatchData({...oldData, title: event.target.value})
+                        setPatchData({ ...oldData, title: event.target.value })
                     }}
                 />
                 <TextField multiline
@@ -83,12 +90,12 @@ export default function DialogComponent() {
                     variant="standard"
                     value={oldData.body || ""}
                     onChange={(event) => {
-                        setPatchData({...oldData, body: event.target.value})
+                        setPatchData({ ...oldData, body: event.target.value })
                     }}
                 />
             </DialogContent>}
             <DialogActions>
-                <Button onClick={dialogData.mode === "edit" ? handleEdit : dialogData.mode === "add" ? handleSubmit : handleDelete }>{dialogData.mode === "edit" ? "Edit" : dialogData.mode === "add" ? "Add" : "Delete" }</Button>
+                <Button onClick={dialogData.mode === "edit" ? handleEdit : dialogData.mode === "add" ? handleSubmit : handleDelete}>{dialogData.mode === "edit" ? "Edit" : dialogData.mode === "add" ? "Add" : "Delete"}</Button>
                 <Button onClick={handleClose}>Cancel</Button>
             </DialogActions>
         </Dialog>

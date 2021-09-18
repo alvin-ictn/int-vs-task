@@ -2,28 +2,28 @@ import * as type from '../types';
 
 export const getArticle = ({start,end}) => {
   return {
-    start,end,
+    payload: { start, end },
     type: type.GET_ARTICLE_REQUESTED,
   }
 }
 
 export const postArticle = (data) => {
   return {
-    data,
+    payload: data,
     type: type.POST_ARTICLE_REQUESTED,
   }
 }
 
 export const patchArticle = (data) => {
   return {
-    data,
+    payload: data,
     type: type.PATCH_ARTICLE_REQUESTED,
   }
 }
 
 export const deleteArticle = (id) => {
   return {
-    id,
+    payload: id,
     type: type.DELETE_ARTICLE_REQUESTED,
   }
 }
