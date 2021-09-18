@@ -24,7 +24,8 @@ export default function CardComponent({ data }) {
               </Typography>
             </Grid>
             <Grid>
-              <EditIcon className="icon" onClick={() => dispatch(openDialog({data, mode: 'edit'}))} /> <DeleteIcon className="icon" />
+              <EditIcon className="icon" onClick={() => dispatch(openDialog({data, mode: 'edit'}))} />
+              <DeleteIcon className="icon" onClick={() => dispatch(openDialog({data, mode: 'delete'}))} />
             </Grid>
           </Grid>
           <Typography variant="h5" component="div">

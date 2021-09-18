@@ -22,7 +22,6 @@ const articleReducer = (state = initialState, action) => {
     case type.POST_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.POST_ARTICLE_SUCCESS:
-      console.log(action)
       return { ...state, loading: false, article: action.body }
     case type.POST_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
@@ -41,14 +40,15 @@ const articleReducer = (state = initialState, action) => {
     case type.DELETE_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.DELETE_ARTICLE_SUCCESS:
-      return { ...state, loading: false, article: action.body }
+      const newArray = state.article.filter((obj => obj.id !== action.article.id.id));
+      return { ...state, loading: false, article: newArray }
     case type.DELETE_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
     case type.OPEN_DIAGLOG:
       return { ...state, dialog: true, oldData: action.data, mode: action.mode};
     case type.CLOSE_DIALOG:
-      return { ...state, dialog: false, oldData: {}};
+      return { ...state, dialog: false};
     default:
       return state;
   }

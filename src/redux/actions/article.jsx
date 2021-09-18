@@ -7,8 +7,9 @@ export const getArticle = ({start,end}) => {
   }
 }
 
-export const postArticle = () => {
+export const postArticle = (data) => {
   return {
+    data,
     type: type.POST_ARTICLE_REQUESTED,
   }
 }
@@ -20,8 +21,9 @@ export const patchArticle = (data) => {
   }
 }
 
-export const deleteArticle = () => {
+export const deleteArticle = (id) => {
   return {
+    id,
     type: type.DELETE_ARTICLE_REQUESTED,
   }
 }

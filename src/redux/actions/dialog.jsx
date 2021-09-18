@@ -9,7 +9,6 @@ export const openDialog = ({data, mode}) => {
 
 export const closeDialog = (data) => {
     return {
-        data,
         type: type.CLOSE_DIALOG
     }
 }

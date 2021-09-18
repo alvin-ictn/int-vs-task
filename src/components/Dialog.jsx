@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@mui/material';
 import { closeDialog } from '../redux/actions/dialog'
-import { patchArticle, postArticle } from '../redux/actions/article'
+import { patchArticle, postArticle, deleteArticle } from '../redux/actions/article'
 
 export default function DialogComponent() {
     const dispatch = useDispatch();
@@ -15,12 +15,11 @@ export default function DialogComponent() {
     const [oldData, setPatchData] = useState({}); 
 
     useEffect(() => {
-        dialogData.mode === "edit" && setPatchData(() => dialogData.oldData)
+        (dialogData.mode === "edit" || dialogData.mode === "delete") && setPatchData(() => dialogData.oldData)
     },[dialogData, dispatch]);
 
-    const handleClose = () => {
-        setPatchData({});
-        dispatch(closeDialog());
+    const handleClose = async () => {
+        await dispatch(closeDialog());
     }
 
     const handleEdit = async () => {
@@ -35,12 +34,19 @@ export default function DialogComponent() {
         await setPatchData({});
     }
 
+    const handleDelete = async () => {
+        const { id } = oldData;
+
+        await dispatch(deleteArticle(id));
+        await dispatch(closeDialog());
+        await setPatchData({});
+    }
+
     return (
         <Dialog open={dialogData.dialog} onClose={handleClose}>
-            <DialogTitle>{dialogData.mode === "add" ? "Add New Article" : `Change Content #${dialogData.oldData.id}`}</DialogTitle>
-            <DialogContent>
-            {dialogData.mode === "add" 
-            && <TextField
+            <DialogTitle>{dialogData.mode === "add" ? "Add New Article" : `${dialogData.mode === "edit" ? "Change" : "Delete"} Content #${dialogData?.oldData?.id}`}</DialogTitle>
+            {(dialogData.mode === "add" || dialogData.mode === "edit") && <DialogContent>
+            {dialogData.mode === "add" && <TextField
                     autoFocus
                     margin="dense"
                     id="userId"
@@ -80,9 +86,10 @@ export default function DialogComponent() {
                         setPatchData({...oldData, body: event.target.value})
                     }}
                 />
-            </DialogContent>
+            </DialogContent>}
             <DialogActions>
-                <Button onClick={dialogData.mode === "edit" ? handleEdit : handleSubmit}>Submit</Button>
+                <Button onClick={dialogData.mode === "edit" ? handleEdit : dialogData.mode === "add" ? handleSubmit : handleDelete }>{dialogData.mode === "edit" ? "Edit" : dialogData.mode === "add" ? "Add" : "Delete" }</Button>
+                <Button onClick={closeDialog}>Cancel</Button>
             </DialogActions>
         </Dialog>
     )
