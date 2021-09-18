@@ -20,6 +20,7 @@ export default function DialogComponent() {
 
     const handleClose = async () => {
         await dispatch(closeDialog());
+        await setPatchData({});
     }
 
     const handleEdit = async () => {
@@ -36,7 +37,6 @@ export default function DialogComponent() {
 
     const handleDelete = async () => {
         const { id } = oldData;
-
         await dispatch(deleteArticle(id));
         await dispatch(closeDialog());
         await setPatchData({});
@@ -89,7 +89,7 @@ export default function DialogComponent() {
             </DialogContent>}
             <DialogActions>
                 <Button onClick={dialogData.mode === "edit" ? handleEdit : dialogData.mode === "add" ? handleSubmit : handleDelete }>{dialogData.mode === "edit" ? "Edit" : dialogData.mode === "add" ? "Add" : "Delete" }</Button>
-                <Button onClick={closeDialog}>Cancel</Button>
+                <Button onClick={handleClose}>Cancel</Button>
             </DialogActions>
         </Dialog>
     )

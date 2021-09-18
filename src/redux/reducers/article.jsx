@@ -22,7 +22,9 @@ const articleReducer = (state = initialState, action) => {
     case type.POST_ARTICLE_REQUESTED:
       return { ...state, loading: true }
     case type.POST_ARTICLE_SUCCESS:
-      return { ...state, loading: false, article: action.body }
+      state.article.unshift(action.article);
+
+      return { ...state, loading: false}
     case type.POST_ARTICLE_FAILED:
       return { ...state, loading: false, error: action.message }
 
@@ -49,6 +51,8 @@ const articleReducer = (state = initialState, action) => {
       return { ...state, dialog: true, oldData: action.data, mode: action.mode};
     case type.CLOSE_DIALOG:
       return { ...state, dialog: false};
+
+    case type.CLEAR_OLD:
     default:
       return state;
   }

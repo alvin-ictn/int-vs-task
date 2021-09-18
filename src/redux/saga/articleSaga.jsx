@@ -48,7 +48,6 @@ export const fetchPatchArticle = async ({ data }) => {
 }
 
 function* handlePatchArticle(data) {
-   console.log("patch", data)
    try {
       const article = yield call(fetchPatchArticle, data);
       yield put({ type: type.PATCH_ARTICLE_SUCCESS, article });
@@ -58,18 +57,19 @@ function* handlePatchArticle(data) {
 }
 
 export const fetchPostArticle = async ({ data }) => {
-   const { id, title, body } = data;
 
    try {
-      const response = await fetch(API.EDIT(id), {
+      const response = await fetch(API.POST, {
          method: "POST",
          headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-         }, body: JSON.stringify({title, body})
+         }, body: JSON.stringify(data)
       });
       const jsonData = await response.json();
-      if (response.status === 200) return jsonData
+      console.log("a",response, jsonData)
+
+      if (response.status === 200 || response.status === 201) return jsonData
       return false
    }
    catch (e) {
@@ -78,7 +78,6 @@ export const fetchPostArticle = async ({ data }) => {
 }
 
 function* handlePostArticle(data) {
-   console.log("handle add",data)
    try {
       const article = yield call(fetchPostArticle, data);
       yield put({ type: type.POST_ARTICLE_SUCCESS, article });
@@ -105,7 +104,6 @@ export const fetchDeleteArticle = async (id) => {
 }
 
 function* handleDeleteArticle(id) {
-   console.log("handle Del",id)
    try {
       const article = yield call(fetchDeleteArticle, id);
       yield put({ type: type.DELETE_ARTICLE_SUCCESS, article });

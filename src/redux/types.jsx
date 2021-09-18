@@ -16,3 +16,5 @@ export const DELETE_ARTICLE_FAILED = 'article/delete/rejected';
 
 export const OPEN_DIAGLOG = 'dialog/open';
 export const CLOSE_DIALOG = 'dialog/close'
+
+export const CLEAR_OLD = 'clear/old'

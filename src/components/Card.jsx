@@ -35,9 +35,6 @@ export default function CardComponent({ data }) {
             {data.body}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
       </Card>
 
     </>
